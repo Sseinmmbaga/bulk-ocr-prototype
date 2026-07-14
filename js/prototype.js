@@ -30,6 +30,7 @@ const nextTooltip = document.getElementById('nextTooltip');
 
 const approveBtn = document.getElementById('approveBtn');
 const rejectBtn = document.getElementById('rejectBtn');
+const skipBtn = document.getElementById('skipBtn');
 const saveBtn = document.getElementById('saveBtn');
 
 const currentPageNum = document.getElementById('currentPageNum');
@@ -250,6 +251,17 @@ function rejectPage() {
     renderPage();
 }
 
+function skipPage() {
+    // Defer the decision: keep the page pending and move on
+    saveCurrentEdits();
+    pages[currentIndex].status = 'pending';
+
+    if (currentIndex < pages.length - 1) {
+        currentIndex++;
+    }
+    renderPage();
+}
+
 function goPrev() {
     if (currentIndex > 0) {
         saveCurrentEdits();
@@ -348,6 +360,7 @@ prevBtn.addEventListener('click', goPrev);
 nextBtn.addEventListener('click', goNext);
 approveBtn.addEventListener('click', approvePage);
 rejectBtn.addEventListener('click', rejectPage);
+skipBtn.addEventListener('click', skipPage);
 saveBtn.addEventListener('click', trySave);
 
 ocrTextarea.addEventListener('input', () => {
@@ -362,6 +375,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') goNext();
     if (e.key === 'a') approvePage();
     if (e.key === 'r') rejectPage();
+    if (e.key === 's') skipPage();
     if (e.key === 'Escape') tryClose();
 });
 

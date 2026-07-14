@@ -857,44 +857,85 @@ a.red {
 }
 
 /* ================================
-   Info bar showing persistence
+   Persistence info - more visible
    ================================ */
 
 .persistence-info {
-    margin-top: 8px;
-    padding: 6px 10px;
-    background: #eaf3ff;
-    border: 1px solid #a2c7f2;
-    font-size: 0.8em;
-    color: #252525;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #d5fdf4;
+    border-left: 4px solid #14866d;
+    font-size: 0.85em;
+    color: #14866d;
     display: none;
+    border-radius: 0 3px 3px 0;
 }
 
 .persistence-info.visible {
     display: block;
 }
 
-.legend {
-    margin-top: 8px;
+.persistence-info strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #14866d;
+}
+
+/* ================================
+   Sidebar with nav at bottom (Booklet pattern)
+   ================================ */
+
+.page-sidebar-wrapper {
+    width: 200px;
+    background: #f6f6f6;
+    border-right: 1px solid #aaa;
     display: flex;
-    gap: 12px;
+    flex-direction: column;
+}
+
+.page-sidebar-wrapper .page-sidebar {
+    width: 100%;
+    border-right: none;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-nav {
+    border-top: 1px solid #aaa;
+    padding: 8px;
+    background: linear-gradient(to bottom, #f0f0f0 0%, #e0e0e0 100%);
+    display: flex;
+    gap: 6px;
+    justify-content: space-between;
+}
+
+.sidebar-nav .nav-btn {
+    flex: 1;
+    padding: 4px 8px;
     font-size: 0.8em;
-    color: #54595d;
-    align-items: center;
+    text-align: center;
+    white-space: nowrap;
 }
 
-.legend-item {
+.sidebar-nav .nav-btn .tooltip {
+    bottom: auto;
+    top: 100%;
+    transform: translateX(-50%) translateY(6px);
+}
+
+/* ================================
+   Content header - lighter
+   ================================ */
+
+.content-header {
+    padding: 8px 14px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
     display: flex;
     align-items: center;
-    gap: 4px;
 }
 
-.legend-swatch {
-    display: inline-block;
-    padding: 1px 6px;
-    border: 1px solid;
-    font-size: 0.9em;
+.content-header .page-indicator {
+    font-size: 0.95em;
 }
 
-.legend-swatch.red { background: #fee7e6; color: #ba0000; border-color: #f8d7d3; }
-.legend-swatch.yellow { background: #fffde7; color: #886600; border-color: #ffe066; }
