@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index:The History of Great Discoveries — Prototype</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="mw-page">
+
+    <!-- Fake MediaWiki header -->
+    <div class="mw-header">
+        <div class="mw-header-title">mwdd-default</div>
+        <div class="mw-user-links">
+            <a href="#">Hussein</a>
+            <a href="#">Talk</a>
+            <a href="#">Preferences</a>
+            <a href="#">Watchlist</a>
+            <a href="#">Contributions</a>
+            <a href="#">Log out</a>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mw-tabs">
+        <a href="#" class="mw-tab active">Index</a>
+        <a href="#" class="mw-tab red">Discussion</a>
+        <span style="margin-left:auto;">
+            <a href="#" class="mw-tab">Read</a>
+            <a href="#" class="mw-tab red">Edit</a>
+            <a href="#" class="mw-tab">View history</a>
+        </span>
+    </div>
+
+    <!-- Main content -->
+    <div class="mw-content">
+
+        <h1 class="mw-page-title">Index:The History of Great Discoveries.pdf</h1>
+
+        <!-- Metadata table -->
+        <table class="index-metadata">
+            <tr><td>Title:</td><td>The History of Great Discoveries</td></tr>
+            <tr><td>Author:</td><td>James Wilson</td></tr>
+            <tr><td>Year:</td><td>1875</td></tr>
+            <tr><td>Publisher:</td><td>London Academic Press</td></tr>
+            <tr>
+                <td>Source:</td>
+                <td class="thumbnail-cell">
+                    <img src="mock-data/images/page-1.jpg" alt="Book source" onerror="this.style.display='none'">
+                    <div style="color:#999; font-size:12px; padding:20px;">
+                        [Book source thumbnail here]
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <h2 style="font-size:20px; margin-bottom:12px;">Pages</h2>
+
+        <div class="bulk-ocr-section">
+            <button class="bulk-ocr-button" id="openModal">
+                📄 Bulk OCR
+            </button>
+            <div class="bulk-ocr-warning">
+                This feature is under active development and needs to be used with extreme caution.
+            </div>
+        </div>
+
+        <div class="pagelist">
+            <a class="pagelist-number">1</a>
+            <a class="pagelist-number">2</a>
+            <a class="pagelist-number">3</a>
+            <a class="pagelist-number">4</a>
+            <a class="pagelist-number">5</a>
+            <a class="pagelist-number">6</a>
+            <a class="pagelist-number">7</a>
+            <a class="pagelist-number">8</a>
+            <a class="pagelist-number">9</a>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================================
+     Feedback Modal
+     ================================ -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <div>
+                <div class="modal-title">Bulk OCR — Review Results</div>
+                <div class="modal-title-sub">Index:The History of Great Discoveries.pdf</div>
+            </div>
+            <div class="modal-header-actions">
+                <button class="modal-close-btn" id="closeBtn" title="Cancel">✕</button>
+            </div>
+        </div>
+
+        <!-- Status bar -->
+        <div class="status-bar">
+            <span class="status-chip pending"><span id="statPending">9</span> Pending</span>
+            <span class="status-chip approved"><span id="statApproved">0</span> Approved</span>
+            <span class="status-chip rejected"><span id="statRejected">0</span> Rejected</span>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <button class="nav-btn" id="prevBtn">
+                ← Previous
+                <span class="tooltip" id="prevTooltip">Page 0 — pending</span>
+            </button>
+            <div class="page-indicator">
+                Page <span id="currentPageNum">1</span> of <span id="totalPagesNum">9</span>
+                <span class="page-indicator-sub" id="pageStatus">Pending review</span>
+            </div>
+            <button class="nav-btn" id="nextBtn">
+                Next →
+                <span class="tooltip" id="nextTooltip">Page 2 — pending</span>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+
+            <!-- Text pane (left) -->
+            <div class="text-pane">
+                <div class="text-pane-header">OCR Text (editable)</div>
+                <div class="error-banner" id="errorBanner">
+                    <strong>OCR failed for this page.</strong>
+                    <span id="errorMessage"></span>
+                </div>
+                <textarea class="ocr-textarea" id="ocrTextarea"
+                    placeholder="OCR text will appear here..."></textarea>
+            </div>
+
+            <!-- Image pane (right) -->
+            <div class="image-pane">
+                <div class="image-pane-header">Original Scan</div>
+                <img id="pageImage" src="" alt="Page scan"
+                    onerror="this.src='https://via.placeholder.com/400x600?text=Page+scan'">
+            </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+            <div class="footer-left">
+                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+            </div>
+            <div class="footer-right">
+                <button class="btn btn-reject" id="rejectBtn">
+                    ✕ Reject Page
+                </button>
+                <button class="btn btn-approve" id="approveBtn">
+                    ✓ Approve Page
+                </button>
+                <button class="btn btn-primary" id="saveBtn" disabled>
+                    Save Approved (<span id="saveCount">0</span>)
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================================
+     Confirmation Dialog for Cancel
+     ================================ -->
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+        <h3>Discard all changes?</h3>
+        <p>You have reviewed some pages. Closing this dialog will discard your approvals and rejections. Are you sure?</p>
+        <div class="btns">
+            <button class="btn btn-secondary" id="confirmCancelBtn">Keep reviewing</button>
+            <button class="btn btn-reject" id="confirmDiscardBtn">Discard changes</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/prototype.js"></script>
+</body>
+</html>

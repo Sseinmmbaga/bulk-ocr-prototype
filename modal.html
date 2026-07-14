@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bulk OCR Modal — Direct View</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { padding: 0; }
+        .info-bar {
+            background: #14866d;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+        }
+        .info-bar a { color: white; }
+    </style>
+</head>
+<body>
+
+<div class="info-bar">
+    Direct view of the Bulk OCR feedback modal. 
+    <a href="index.html">← Back to Index page view</a>
+</div>
+
+<!-- Same page structure as index.html -->
+<div class="mw-page" style="opacity:0.3;">
+    <div class="mw-header">
+        <div class="mw-header-title">mwdd-default</div>
+    </div>
+    <div class="mw-content">
+        <h1 class="mw-page-title">Index:The History of Great Discoveries.pdf</h1>
+    </div>
+</div>
+
+<!-- Modal always open on this page -->
+<div class="modal-overlay open" id="modalOverlay">
+    <!-- Copy the entire modal HTML from index.html here -->
+</div>
+
+<script>
+    // Auto-open on load
+    window.addEventListener('DOMContentLoaded', () => {
+        // Redirect to index.html and auto-click the button
+        window.location.href = 'index.html#openmodal';
+    });
+</script>
+
+</body>
+</html>
