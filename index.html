@@ -155,8 +155,19 @@
                     <div class="text-pane">
                         <div class="pane-header">OCR Text (editable)</div>
                         <div class="error-banner" id="errorBanner">
-                            <strong>OCR failed for this page.</strong>
+                            <strong>OCR could not read this page.</strong>
                             <span id="errorMessage"></span>
+                            <div class="error-hint">
+                                You can type the text manually below, or retry the OCR with a different engine.
+                            </div>
+                            <div class="error-banner-actions">
+                                <button class="retry-btn" id="retryOcrBtn">
+                                    🔄 Retry OCR
+                                </button>
+                                <button class="retry-btn" id="clearErrorBtn">
+                                    ✎ Type manually
+                                </button>
+                            </div>
                         </div>
                         <div class="status-banner" id="statusBanner">
                             This page has not been proofread

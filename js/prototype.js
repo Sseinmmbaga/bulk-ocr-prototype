@@ -52,6 +52,8 @@ const ocrTextarea = document.getElementById('ocrTextarea');
 const pageImage = document.getElementById('pageImage');
 const errorBanner = document.getElementById('errorBanner');
 const errorMessage = document.getElementById('errorMessage');
+const retryOcrBtn = document.getElementById('retryOcrBtn');
+const clearErrorBtn = document.getElementById('clearErrorBtn');
 
 // counters and progress
 const statPending = document.getElementById('statPending');
@@ -179,16 +181,20 @@ function renderPage() {
     pageStatus.textContent = capitalize(page.status);
 
     ocrTextarea.value = page.ocrText || '';
-    ocrTextarea.classList.toggle('error', page.hasErrors);
+    ocrTextarea.classList.toggle('error', page.hasErrors && !page.userEdited);
 
-    if (page.hasErrors) {
+    // show the error banner only while OCR failed and the user hasn't
+    // started typing their own transcription
+    if (page.hasErrors && !page.userEdited) {
         errorBanner.classList.add('visible');
         errorMessage.textContent = ' ' + (page.errorMessage || 'Unknown error');
-        approveBtn.disabled = true;
     } else {
         errorBanner.classList.remove('visible');
-        approveBtn.disabled = false;
     }
+
+    // Approve is available whenever there is text, no matter whether it came
+    // from OCR or the user typed it - OCR is a helper, not a gatekeeper
+    approveBtn.disabled = !ocrTextarea.value.trim();
 
     // same wording as the "Not proofread" banner on a real Page: edit view
     if (statusBanner) {
@@ -241,13 +247,14 @@ function updateStats() {
 }
 
 
-// Approve the current page and move on. Pages where OCR failed can't be
-// approved - there would be nothing to save.
+// Approve the current page and move on. Only requirement is that there is
+// some text to save - it may come from OCR, a retry, or manual typing.
 function approvePage() {
     const page = pages[currentIndex];
-    if (page.hasErrors) return;
+    if (!ocrTextarea.value.trim()) return;
     page.ocrText = ocrTextarea.value;
     page.status = 'approved';
+    page.hasErrors = false;
     hasUnsavedChanges = true;
 
     if (currentIndex < pages.length - 1) {
@@ -370,6 +377,49 @@ function updatePersistenceInfo() {
     persistenceInfo.classList.toggle('visible', anyApproved);
 }
 
+// Mock a single-page OCR retry. The real version would hit the OCR API again,
+// possibly with a different engine or language setting - retrying one page is
+// cheap, no need to redo the whole book.
+function retryOcrForCurrentPage() {
+    const page = pages[currentIndex];
+    if (!page) return;
+
+    retryOcrBtn.textContent = '⏳ Retrying OCR...';
+    retryOcrBtn.classList.add('retrying');
+
+    // fake a bit of network delay
+    setTimeout(() => {
+        const mockRecoveredText = 'The recognition system tried again and produced this text. In a real implementation, this would be the actual OCR result from a second attempt, possibly using a different engine or language setting.\n\n(This is prototype mock text — the real system would call the OCR API.)';
+
+        page.ocrText = mockRecoveredText;
+        page.hasErrors = false;
+        page.userEdited = false;
+
+        // only touch the visible UI if the user is still on this page
+        if (pages[currentIndex] === page) {
+            ocrTextarea.value = mockRecoveredText;
+            ocrTextarea.classList.remove('error');
+            errorBanner.classList.remove('visible');
+            approveBtn.disabled = false;
+        }
+
+        retryOcrBtn.textContent = '🔄 Retry OCR';
+        retryOcrBtn.classList.remove('retrying');
+
+        updateSidebar();
+    }, 1500);
+}
+
+// "Type manually": hide the error banner and put the cursor in the textarea
+// so the user can transcribe the page themselves.
+function clearErrorAndAllowManualEntry() {
+    errorBanner.classList.remove('visible');
+    pages[currentIndex].userEdited = true;
+    ocrTextarea.classList.remove('error');
+    ocrTextarea.focus();
+    approveBtn.disabled = !ocrTextarea.value.trim();
+}
+
 
 // event wiring
 
@@ -407,8 +457,19 @@ saveConfirmCancel.addEventListener('click', () => {
 saveConfirmOk.addEventListener('click', performSave);
 successOk.addEventListener('click', finishSave);
 
+if (retryOcrBtn) retryOcrBtn.addEventListener('click', retryOcrForCurrentPage);
+if (clearErrorBtn) clearErrorBtn.addEventListener('click', clearErrorAndAllowManualEntry);
+
 ocrTextarea.addEventListener('input', () => {
     hasUnsavedChanges = true;
+
+    // once the user types on a failed page, treat it as a manual
+    // transcription: drop the error banner and let them approve
+    if (pages[currentIndex]) {
+        pages[currentIndex].userEdited = true;
+    }
+    approveBtn.disabled = !ocrTextarea.value.trim();
+    errorBanner.classList.remove('visible');
 });
 
 document.addEventListener('keydown', (e) => {

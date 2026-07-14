@@ -40,6 +40,16 @@ Before rewriting this as real OOUI code, please look at:
 
 If any of these decisions need to change, discuss on Phabricator T415145 before implementing.
 
+### Handling OCR failures
+
+When OCR fails for a page, the user is not blocked. They can:
+
+1. Retry OCR — attempt the OCR again (in real implementation, possibly with a different engine or language)
+2. Type manually — Wikisource is a human transcription project; the user can always type the text themselves
+3. Reject the page — leave it for someone else to handle later
+
+The Approve button becomes enabled as soon as there is any text in the editor, regardless of whether the text came from OCR or manual typing. This matches the philosophy of Wikisource: OCR is a helper, not a gatekeeper.
+
 ### Non-goals of this prototype
 
 This prototype is not:
