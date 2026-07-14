@@ -305,6 +305,12 @@ a.red {
     color: #ba0000;
     text-decoration: none;
     border: 1px solid #f8d7d3;
+    cursor: pointer;
+}
+
+.pagelist-number:hover {
+    text-decoration: underline;
+    border-color: #aaa;
 }
 
 /* ================================

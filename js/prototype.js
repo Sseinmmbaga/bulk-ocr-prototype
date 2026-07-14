@@ -132,16 +132,19 @@ function buildSidebar() {
 
 // Rebuild the numbered pagelist on the Index page. Follows the Wikisource
 // colour convention: red = not proofread, yellow = has text but needs review,
-// struck through = rejected. Red pages can be run through Bulk OCR again later.
+// struck through = rejected. Each number is clickable and opens the review
+// modal straight on that page - so if pages 1-4 are done, the user can just
+// click 5 to pick up where they left off.
 function buildPagelist() {
     if (!pagelistElement) return;
     pagelistElement.innerHTML = '';
 
-    pages.forEach(page => {
+    pages.forEach((page, index) => {
         const link = document.createElement('a');
         link.className = 'pagelist-number ' + page.status;
         link.textContent = page.number;
-        link.title = `Page ${page.number} — ${capitalize(page.status)}`;
+        link.title = `Page ${page.number} — ${capitalize(page.status)}. Click to review this page.`;
+        link.addEventListener('click', () => openModalAt(index));
         pagelistElement.appendChild(link);
     });
 }
@@ -421,11 +424,11 @@ function clearErrorAndAllowManualEntry() {
 }
 
 
-// event wiring
-
-openBtn.addEventListener('click', async () => {
+// Open the review modal on a given page. Used by the Bulk OCR button (page 0)
+// and by clicking a page number on the Index pagelist.
+async function openModalAt(index) {
     if (!pages.length) await loadPages();
-    currentIndex = 0;
+    currentIndex = index;
 
     // reset only unreviewed pages - approved/rejected ones from an earlier
     // run keep their status
@@ -438,7 +441,12 @@ openBtn.addEventListener('click', async () => {
     hasUnsavedChanges = false;
     renderPage();
     modal.classList.add('open');
-});
+}
+
+
+// event wiring
+
+openBtn.addEventListener('click', () => openModalAt(0));
 
 cancelBtn.addEventListener('click', tryClose);
 confirmCancelBtn.addEventListener('click', () => confirmDialog.classList.remove('open'));
