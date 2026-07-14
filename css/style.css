@@ -1,5 +1,6 @@
 /* ================================
-   MediaWiki-inspired base styling
+   Vector 2010 Skin Styling
+   Based on user's actual MediaWiki appearance
    ================================ */
 
 * {
@@ -9,96 +10,239 @@
 }
 
 body {
-    font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+    font-family: sans-serif;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.5;
     color: #202122;
-    background: #f8f9fa;
+    background: #f6f6f6;
 }
 
-/* ================================
-   Page wrapper mimicking Vector skin
-   ================================ */
-
-.mw-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: #fff;
-    min-height: 100vh;
-    border-left: 1px solid #eaecf0;
-    border-right: 1px solid #eaecf0;
-}
-
-.mw-header {
-    background: #fff;
-    border-bottom: 1px solid #a2a9b1;
-    padding: 12px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mw-header-title {
-    font-family: 'Linux Libertine', 'Georgia', serif;
-    font-size: 20px;
-    color: #202122;
-}
-
-.mw-user-links {
-    font-size: 13px;
-    color: #3366cc;
-}
-
-.mw-user-links a {
-    color: #3366cc;
+a {
+    color: #0645ad;
     text-decoration: none;
-    margin-left: 12px;
 }
 
-.mw-user-links a:hover {
+a:hover {
     text-decoration: underline;
 }
 
-.mw-tabs {
-    background: #f8f9fa;
-    padding: 0 24px;
-    border-bottom: 1px solid #a2a9b1;
+a.red {
+    color: #ba0000;
+}
+
+/* ================================
+   Overall layout (Vector 2010)
+   ================================ */
+
+.vector-page {
     display: flex;
-    gap: 16px;
+    min-height: 100vh;
+    background: #fff;
+}
+
+/* ================================
+   Left sidebar
+   ================================ */
+
+.vector-sidebar {
+    width: 160px;
+    padding: 20px 10px;
+    background: #fff;
+    border-right: 1px solid #eaecf0;
+    flex-shrink: 0;
+}
+
+.vector-logo {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 20px;
+    background: radial-gradient(circle, #f8a5c2 0%, #e17055 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #333;
+    font-size: 11px;
+    padding: 15px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.vector-nav-section {
+    margin-bottom: 20px;
+}
+
+.vector-nav-title {
+    font-size: 12px;
+    color: #54595d;
+    margin-bottom: 6px;
+    padding-left: 6px;
+    border-bottom: 1px solid #eaecf0;
+    padding-bottom: 4px;
+}
+
+.vector-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.vector-nav-list li {
+    padding: 3px 6px;
     font-size: 13px;
 }
 
-.mw-tab {
-    padding: 10px 12px;
+.vector-nav-list a {
+    color: #0645ad;
+}
+
+/* ================================
+   Main content area
+   ================================ */
+
+.vector-main {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+}
+
+/* ================================
+   Top user links (right side, top)
+   ================================ */
+
+.vector-user-links {
+    text-align: right;
+    padding: 8px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid #eaecf0;
+}
+
+.vector-user-links::before {
+    content: "👤";
+    margin-right: 4px;
+}
+
+.vector-user-links a {
+    margin-left: 12px;
+    color: #0645ad;
+}
+
+.vector-user-links .username {
+    color: #0645ad;
+    font-weight: normal;
+}
+
+/* ================================
+   Content tabs (Page, Discussion, English, etc)
+   ================================ */
+
+.vector-namespace-tabs {
+    display: flex;
+    align-items: flex-end;
+    background: #fff;
+    padding: 0 20px;
+    border-bottom: 1px solid #a2a9b1;
+    font-size: 13px;
+    position: relative;
+}
+
+.vector-namespace-tabs .tab {
+    padding: 8px 12px;
     color: #202122;
     text-decoration: none;
     border-bottom: 2px solid transparent;
+    margin-right: 4px;
 }
 
-.mw-tab.active {
+.vector-namespace-tabs .tab.active {
     border-bottom-color: #202122;
-    font-weight: bold;
+    font-weight: normal;
 }
 
-.mw-tab.red {
-    color: #d33;
+.vector-namespace-tabs .tab.red-tab {
+    color: #ba0000;
 }
 
-.mw-content {
-    padding: 24px;
+.vector-namespace-tabs .lang-dropdown {
+    padding: 8px 6px;
+    color: #54595d;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
-.mw-page-title {
+.vector-view-tabs {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.vector-view-tabs .tab {
+    padding: 8px 12px;
+}
+
+.vector-view-tabs .star {
+    padding: 8px 10px;
+    color: #a2a9b1;
+    cursor: pointer;
+}
+
+.vector-more-dropdown {
+    padding: 8px 12px;
+    color: #202122;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.vector-search {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+    padding: 4px 0;
+}
+
+.vector-search input {
+    padding: 4px 8px;
+    border: 1px solid #a2a9b1;
+    border-right: none;
+    font-size: 13px;
+    width: 180px;
+    height: 26px;
+}
+
+.vector-search button {
+    padding: 4px 10px;
+    border: 1px solid #a2a9b1;
+    background: #f8f9fa;
+    cursor: pointer;
+    height: 26px;
+}
+
+/* ================================
+   Main content
+   ================================ */
+
+.vector-content {
+    padding: 24px 20px;
+}
+
+.vector-page-title {
     font-family: 'Linux Libertine', 'Georgia', serif;
     font-size: 28px;
     font-weight: normal;
     border-bottom: 1px solid #a2a9b1;
     padding-bottom: 8px;
     margin-bottom: 20px;
+    color: #202122;
 }
 
 /* ================================
-   Index page metadata table
+   Index metadata table
    ================================ */
 
 .index-metadata {
@@ -106,6 +250,7 @@ body {
     max-width: 700px;
     border-collapse: collapse;
     margin-bottom: 24px;
+    font-size: 13px;
 }
 
 .index-metadata td {
@@ -117,7 +262,7 @@ body {
 .index-metadata td:first-child {
     background: #eaecf0;
     font-weight: bold;
-    width: 120px;
+    width: 100px;
 }
 
 .index-metadata .thumbnail-cell {
@@ -133,22 +278,31 @@ body {
    Bulk OCR button and warning
    ================================ */
 
+.pages-heading {
+    font-family: 'Linux Libertine', 'Georgia', serif;
+    font-size: 20px;
+    font-weight: normal;
+    border-bottom: 1px solid #a2a9b1;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+    color: #202122;
+}
+
 .bulk-ocr-section {
     border: 1px dashed #a2a9b1;
     padding: 16px;
-    margin: 24px 0;
-    background: #fff;
+    margin: 12px 0;
 }
 
 .bulk-ocr-button {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 12px;
+    padding: 5px 10px;
     background: #fff;
     border: 1px solid #a2a9b1;
     border-radius: 2px;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
     color: #202122;
     font-family: inherit;
@@ -156,7 +310,6 @@ body {
 
 .bulk-ocr-button:hover {
     background: #eaecf0;
-    border-color: #72777d;
 }
 
 .bulk-ocr-warning {
@@ -164,9 +317,7 @@ body {
     padding: 10px 14px;
     background: #fef6e7;
     border: 1px solid #fc3;
-    border-radius: 2px;
     font-size: 13px;
-    color: #202122;
     display: flex;
     gap: 8px;
     align-items: center;
@@ -186,17 +337,17 @@ body {
     margin-top: 16px;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 3px;
 }
 
 .pagelist-number {
     display: inline-block;
     padding: 2px 8px;
     background: #fee7e6;
-    color: #d33;
-    text-decoration: none;
+    color: #ba0000;
     border: 1px solid #f8d7d3;
     font-size: 13px;
+    cursor: pointer;
 }
 
 /* ================================
@@ -225,8 +376,8 @@ body {
     width: 95%;
     max-width: 1400px;
     height: 92vh;
-    border-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid #a2a9b1;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -237,81 +388,78 @@ body {
    ================================ */
 
 .modal-header {
-    background: #f8f9fa;
+    background: #eaecf0;
     border-bottom: 1px solid #a2a9b1;
-    padding: 12px 20px;
+    padding: 10px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .modal-title {
+    font-family: 'Linux Libertine', 'Georgia', serif;
     font-size: 16px;
     font-weight: bold;
     color: #202122;
 }
 
 .modal-title-sub {
-    font-size: 13px;
+    font-size: 12px;
     color: #54595d;
     margin-top: 2px;
 }
 
-.modal-header-actions {
-    display: flex;
-    gap: 8px;
-}
-
 .modal-close-btn {
-    background: none;
-    border: none;
+    background: #fff;
+    border: 1px solid #a2a9b1;
     cursor: pointer;
-    padding: 6px 10px;
-    font-size: 18px;
-    color: #54595d;
-    border-radius: 2px;
+    padding: 4px 10px;
+    font-size: 14px;
+    color: #202122;
 }
 
 .modal-close-btn:hover {
     background: #eaecf0;
-    color: #202122;
 }
 
 /* ================================
-   Progress bar showing status counts
+   Progress status bar
    ================================ */
 
 .status-bar {
-    padding: 10px 20px;
+    padding: 8px 16px;
     background: #f8f9fa;
     border-bottom: 1px solid #eaecf0;
     display: flex;
-    gap: 20px;
-    font-size: 13px;
+    gap: 16px;
+    font-size: 12px;
 }
 
 .status-chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     padding: 2px 10px;
-    border-radius: 12px;
-    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 2px;
 }
 
 .status-chip.pending {
     background: #eaecf0;
     color: #54595d;
+    border-color: #c8ccd1;
 }
 
 .status-chip.approved {
     background: #d5fdf4;
     color: #14866d;
+    border-color: #a3e8d1;
 }
 
 .status-chip.rejected {
     background: #fee7e6;
-    color: #d33;
+    color: #ba0000;
+    border-color: #f8d7d3;
 }
 
 .status-chip::before {
@@ -323,11 +471,11 @@ body {
 }
 
 /* ================================
-   Navigation bar (prev / next / page indicator)
+   Navigation bar (prev / next)
    ================================ */
 
 .nav-bar {
-    padding: 10px 20px;
+    padding: 8px 16px;
     background: #fff;
     border-bottom: 1px solid #eaecf0;
     display: flex;
@@ -336,14 +484,14 @@ body {
 }
 
 .nav-btn {
-    background: #fff;
+    background: #f8f9fa;
     border: 1px solid #a2a9b1;
-    border-radius: 2px;
-    padding: 6px 12px;
+    padding: 5px 12px;
     font-size: 13px;
     cursor: pointer;
     color: #202122;
     position: relative;
+    font-family: inherit;
 }
 
 .nav-btn:hover:not(:disabled) {
@@ -364,8 +512,7 @@ body {
     background: #202122;
     color: #fff;
     padding: 4px 8px;
-    border-radius: 2px;
-    font-size: 12px;
+    font-size: 11px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
@@ -378,20 +525,22 @@ body {
 }
 
 .page-indicator {
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
     color: #202122;
+}
+
+.page-indicator-num {
+    font-weight: bold;
 }
 
 .page-indicator-sub {
     font-size: 12px;
     color: #54595d;
-    font-weight: normal;
     margin-left: 6px;
 }
 
 /* ================================
-   Main body: side-by-side text and image
+   Body: side-by-side text and image
    ================================ */
 
 .modal-body {
@@ -402,7 +551,7 @@ body {
 
 .text-pane {
     flex: 1;
-    padding: 20px;
+    padding: 16px;
     overflow-y: auto;
     border-right: 1px solid #eaecf0;
     display: flex;
@@ -410,9 +559,9 @@ body {
 }
 
 .text-pane-header {
-    font-size: 12px;
+    font-size: 11px;
     color: #54595d;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -420,12 +569,11 @@ body {
 .ocr-textarea {
     flex: 1;
     width: 100%;
-    padding: 12px;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 14px;
-    line-height: 1.7;
-    border: 1px solid #c8ccd1;
-    border-radius: 2px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    border: 1px solid #a2a9b1;
     resize: none;
     color: #202122;
 }
@@ -433,17 +581,17 @@ body {
 .ocr-textarea:focus {
     outline: none;
     border-color: #3366cc;
-    box-shadow: 0 0 0 2px rgba(51, 102, 204, 0.2);
+    box-shadow: 0 0 0 2px rgba(51, 102, 204, 0.15);
 }
 
 .ocr-textarea.error {
     background: #fef6f5;
-    border-color: #d33;
+    border-color: #ba0000;
 }
 
 .image-pane {
     flex: 1;
-    padding: 20px;
+    padding: 16px;
     background: #f8f9fa;
     overflow-y: auto;
     display: flex;
@@ -452,9 +600,9 @@ body {
 }
 
 .image-pane-header {
-    font-size: 12px;
+    font-size: 11px;
     color: #54595d;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     align-self: flex-start;
@@ -464,21 +612,20 @@ body {
     max-width: 100%;
     max-height: 100%;
     border: 1px solid #c8ccd1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 /* ================================
-   Error banner for empty OCR
+   Error banner
    ================================ */
 
 .error-banner {
-    padding: 12px 16px;
+    padding: 10px 14px;
     background: #fee7e6;
-    border: 1px solid #d33;
-    border-radius: 2px;
-    color: #d33;
+    border: 1px solid #ba0000;
+    color: #ba0000;
     font-size: 13px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: none;
 }
 
@@ -487,36 +634,45 @@ body {
 }
 
 /* ================================
-   Footer with action buttons
+   "This page has not been proofread" banner
+   (Same style as the real Wikisource page)
+   ================================ */
+
+.proofread-status {
+    background: #fee7e6;
+    color: #ba0000;
+    padding: 6px 10px;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 10px;
+    border: 1px solid #f8d7d3;
+}
+
+/* ================================
+   Modal footer with actions
    ================================ */
 
 .modal-footer {
-    padding: 12px 20px;
-    background: #f8f9fa;
+    padding: 10px 16px;
+    background: #eaecf0;
     border-top: 1px solid #a2a9b1;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
-.footer-left {
+.footer-left, .footer-right {
     display: flex;
-    gap: 8px;
-}
-
-.footer-right {
-    display: flex;
-    gap: 8px;
+    gap: 6px;
 }
 
 .btn {
-    padding: 8px 14px;
-    border-radius: 2px;
-    font-size: 14px;
+    padding: 6px 12px;
+    font-size: 13px;
     font-family: inherit;
     cursor: pointer;
-    border: 1px solid transparent;
+    border: 1px solid;
 }
 
 .btn-approve {
@@ -525,15 +681,21 @@ body {
     border-color: #36c;
 }
 
-.btn-approve:hover {
+.btn-approve:hover:not(:disabled) {
     background: #447ff5;
     border-color: #447ff5;
 }
 
+.btn-approve:disabled {
+    background: #a2a9b1;
+    border-color: #a2a9b1;
+    cursor: not-allowed;
+}
+
 .btn-reject {
     background: #fff;
-    color: #d33;
-    border-color: #d33;
+    color: #ba0000;
+    border-color: #ba0000;
 }
 
 .btn-reject:hover {
@@ -557,7 +719,7 @@ body {
     font-weight: bold;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     background: #10745e;
     border-color: #10745e;
 }
@@ -569,7 +731,7 @@ body {
 }
 
 /* ================================
-   Confirmation warning dialog
+   Confirmation dialog
    ================================ */
 
 .confirm-overlay {
@@ -591,20 +753,22 @@ body {
 
 .confirm-box {
     background: #fff;
-    padding: 24px;
-    border-radius: 4px;
+    padding: 20px;
+    border: 1px solid #a2a9b1;
     max-width: 400px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .confirm-box h3 {
+    font-family: 'Linux Libertine', 'Georgia', serif;
     font-size: 16px;
-    margin-bottom: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
     color: #202122;
 }
 
 .confirm-box p {
-    font-size: 14px;
+    font-size: 13px;
     color: #54595d;
     margin-bottom: 16px;
     line-height: 1.5;
@@ -613,5 +777,5 @@ body {
 .confirm-box .btns {
     display: flex;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 6px;
 }
