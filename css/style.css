@@ -1,6 +1,16 @@
+/*
+ * Bulk OCR feedback modal prototype - styles
+ * Hussein Mmbaga (@Ssein) - GSoC 2026 (T415145, modal task T394131)
+ *
+ * Colours and chrome copied from the Vector 2010 (legacy) skin so the mock
+ * looks like a real MediaWiki page. Most of this file goes away when the
+ * design is ported to OOUI widgets (ButtonWidget, ProcessDialog,
+ * MultilineTextInputWidget, BookletLayout), which ship their own styles -
+ * it only exists so mentors can judge the design without visual noise.
+ */
+
 /* ================================
-   Vector 2010 authentic styling
-   Based on MediaWiki Vector legacy skin
+   Reset and base typography
    ================================ */
 
 * {
@@ -937,5 +947,116 @@ a.red {
 
 .content-header .page-indicator {
     font-size: 0.95em;
+}
+
+/* ================================
+   OOUI-like message dialog
+   Matches OO.ui.MessageDialog appearance
+   ================================ */
+
+.message-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.message-dialog-overlay.open {
+    display: flex;
+}
+
+.message-dialog {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 2px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    border: 1px solid #a2a9b1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: message-dialog-appear 0.15s ease-out;
+}
+
+@keyframes message-dialog-appear {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.message-dialog-body {
+    padding: 24px;
+}
+
+.message-dialog-title {
+    font-family: 'Linux Libertine', 'Georgia', serif;
+    font-size: 1.15em;
+    font-weight: bold;
+    color: #202122;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.message-dialog-content {
+    font-size: 0.9em;
+    color: #202122;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.message-dialog-content ul {
+    margin: 8px 0 0 20px;
+    padding: 0;
+}
+
+.message-dialog-content ul li {
+    margin: 4px 0;
+    list-style-type: disc;
+}
+
+.message-dialog-footer {
+    border-top: 1px solid #c8ccd1;
+    display: flex;
+    justify-content: stretch;
+}
+
+.message-dialog-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: #f8f9fa;
+    color: #202122;
+    font-size: 0.95em;
+    font-family: sans-serif;
+    cursor: pointer;
+    border-right: 1px solid #c8ccd1;
+}
+
+.message-dialog-btn:last-child {
+    border-right: none;
+}
+
+.message-dialog-btn:hover {
+    background: #eaecf0;
+}
+
+.message-dialog-btn.primary {
+    background: #3366cc;
+    color: #fff;
+    font-weight: bold;
+}
+
+.message-dialog-btn.primary:hover {
+    background: #447ff5;
+}
+
+.message-dialog-btn.destructive {
+    color: #d33;
+}
+
+.message-dialog-btn.destructive:hover {
+    background: #fee7e6;
 }
 

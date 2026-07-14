@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index:The History of Great Discoveries.pdf — mwdd-default</title>
+
+    <!--
+        Bulk OCR feedback modal prototype
+        Hussein Mmbaga (@Ssein) - GSoC 2026 (T415145, modal task T394131)
+        Live demo: https://sseinmmbaga.github.io/bulk-ocr-prototype/
+
+        A mock Index: page (Vector 2010 look) with a Bulk OCR button that
+        opens the review modal. In the real extension the modal becomes a
+        subclass of OO.ui.ProcessDialog holding a BookletLayout with
+        outlined:true - this page only exists to demo the design.
+    -->
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -72,9 +84,8 @@
 
     </div>
 
-<!-- ================================
-     Feedback Modal
-     ================================ -->
+<!-- Feedback modal. Hidden until Bulk OCR is clicked (.open on the overlay
+     shows it). Becomes an OO.ui.ProcessDialog subclass in the extension. -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
 
@@ -226,6 +237,41 @@
         <div class="btns">
             <button class="btn" id="confirmCancelBtn">Keep reviewing</button>
             <button class="btn btn-reject" id="confirmDiscardBtn">Discard changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- OOUI-style save confirmation dialog -->
+<div class="message-dialog-overlay" id="saveConfirmOverlay">
+    <div class="message-dialog">
+        <div class="message-dialog-body">
+            <div class="message-dialog-title" id="saveConfirmTitle">Save approved pages?</div>
+            <div class="message-dialog-content" id="saveConfirmContent">
+                <!-- Content populated by JS -->
+            </div>
+        </div>
+        <div class="message-dialog-footer">
+            <button class="message-dialog-btn" id="saveConfirmCancel">Cancel</button>
+            <button class="message-dialog-btn primary" id="saveConfirmOk">Save pages</button>
+        </div>
+    </div>
+</div>
+
+<!-- OOUI-style success dialog -->
+<div class="message-dialog-overlay" id="successOverlay">
+    <div class="message-dialog">
+        <div class="message-dialog-body">
+            <div class="message-dialog-title">✓ Pages saved successfully</div>
+            <div class="message-dialog-content">
+                <p id="successMessage"></p>
+                <p style="margin-top:10px; color:#54595d; font-size:0.9em;">
+                    In the real extension this would call the MediaWiki API for each approved page.
+                    You can run Bulk OCR again anytime to process remaining pages.
+                </p>
+            </div>
+        </div>
+        <div class="message-dialog-footer">
+            <button class="message-dialog-btn primary" id="successOk">Done</button>
         </div>
     </div>
 </div>

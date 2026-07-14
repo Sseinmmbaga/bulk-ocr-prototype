@@ -1,61 +1,83 @@
-/**
- * Bulk OCR Feedback Modal Prototype
- *
- * Static HTML/CSS/JS prototype for GSoC 2026 Wikisource Bulk OCR project.
- * The real implementation will use OO.ui.ProcessDialog with BookletLayout.
- *
- * Design based on:
- * - Task T394131 requirements (5 pages preview, safety banner)
- * - OOUI BookletLayout with outlined:true pattern
- * - Vector 2010 skin styling
- * - Existing ProcessDialog patterns from ProofreadPage extension
- */
+// Bulk OCR feedback modal prototype
+// Hussein Mmbaga (@Ssein) - GSoC 2026, Wikisource Bulk OCR Improvement
+// Tasks: T415145 (project), T394131 (feedback modal)
+//
+// This is throwaway prototype code to demo the design. The real version lives
+// in the Wikisource extension as an OO.ui.ProcessDialog with a BookletLayout,
+// so don't port this file directly - the rough mapping is:
+//   pages[] / currentIndex   -> OCR API response + BookletLayout page names
+//   renderPage()             -> BookletLayout.setPage()
+//   approve/reject/save      -> dialog actions in getActionProcess()
+//   the cancel warning       -> showErrors() override, same pattern as
+//                               PagelistInputWidget.Dialog.js in ProofreadPage
+//
+// Shortcuts while the modal is open: arrow keys navigate, a = approve,
+// r = reject, s = skip, Esc = close (warns if there is unsaved work).
 
-let pages = [];
-let currentIndex = 0;
-let hasUnsavedChanges = false;
+let pages = [];                 // page objects loaded from mock-data/pages.json
+let currentIndex = 0;           // which page is currently showing in the modal
+let hasUnsavedChanges = false;  // true once the user has edited or reviewed anything
 
-// DOM refs
+// DOM refs, grabbed once so renderPage() isn't doing lookups on every click
+
+// modal containers
 const modal = document.getElementById('modalOverlay');
 const confirmDialog = document.getElementById('confirmOverlay');
+
+// open/close buttons
 const openBtn = document.getElementById('openModal');
 const cancelBtn = document.getElementById('cancelBtn');
 const confirmCancelBtn = document.getElementById('confirmCancelBtn');
 const confirmDiscardBtn = document.getElementById('confirmDiscardBtn');
 
+// navigation
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const prevTooltip = document.getElementById('prevTooltip');
 const nextTooltip = document.getElementById('nextTooltip');
 
+// per-page actions
 const approveBtn = document.getElementById('approveBtn');
 const rejectBtn = document.getElementById('rejectBtn');
 const skipBtn = document.getElementById('skipBtn');
 const saveBtn = document.getElementById('saveBtn');
 
+// page indicator
 const currentPageNum = document.getElementById('currentPageNum');
 const totalPagesNum = document.getElementById('totalPagesNum');
 const pageStatus = document.getElementById('pageStatus');
 
+// content pane
 const ocrTextarea = document.getElementById('ocrTextarea');
 const pageImage = document.getElementById('pageImage');
 const errorBanner = document.getElementById('errorBanner');
 const errorMessage = document.getElementById('errorMessage');
 
+// counters and progress
 const statPending = document.getElementById('statPending');
 const statApproved = document.getElementById('statApproved');
 const statRejected = document.getElementById('statRejected');
 const saveCount = document.getElementById('saveCount');
 const progressFill = document.getElementById('progressFill');
 const pageSidebar = document.getElementById('pageSidebar');
+
+// Index page bits (outside the modal)
 const pagelistElement = document.getElementById('pagelist');
 const persistenceInfo = document.getElementById('persistenceInfo');
 const statusBanner = document.getElementById('statusBanner');
 
+// OOUI-style message dialogs
+const saveConfirmOverlay = document.getElementById('saveConfirmOverlay');
+const saveConfirmContent = document.getElementById('saveConfirmContent');
+const saveConfirmCancel = document.getElementById('saveConfirmCancel');
+const saveConfirmOk = document.getElementById('saveConfirmOk');
+const successOverlay = document.getElementById('successOverlay');
+const successMessage = document.getElementById('successMessage');
+const successOk = document.getElementById('successOk');
 
-// ================================
-// Load mock data
-// ================================
+
+// Load the mock data. In the real extension this arrives as the OCR API
+// response instead of a static file.
 async function loadPages() {
     try {
         const response = await fetch('mock-data/pages.json');
@@ -71,9 +93,9 @@ async function loadPages() {
 }
 
 
-// ================================
-// Build sidebar with page list (BookletLayout style)
-// ================================
+// Build the clickable page list in the modal sidebar, one item per page with
+// a status dot. Later this becomes BookletLayout.addPages() with one
+// PageLayout per book page.
 function buildSidebar() {
     const header = pageSidebar.querySelector('.sidebar-header');
     pageSidebar.innerHTML = '';
@@ -106,10 +128,9 @@ function buildSidebar() {
 }
 
 
-// ================================
-// Build the Index page's page number list
-// Shows color state: red = pending, yellow = approved
-// ================================
+// Rebuild the numbered pagelist on the Index page. Follows the Wikisource
+// colour convention: red = not proofread, yellow = has text but needs review,
+// struck through = rejected. Red pages can be run through Bulk OCR again later.
 function buildPagelist() {
     if (!pagelistElement) return;
     pagelistElement.innerHTML = '';
@@ -124,9 +145,7 @@ function buildPagelist() {
 }
 
 
-// ================================
-// Update sidebar highlights
-// ================================
+// Highlight the active sidebar item and refresh all the status dots.
 function updateSidebar() {
     document.querySelectorAll('.sidebar-item').forEach((item, index) => {
         item.classList.toggle('active', index === currentIndex);
@@ -140,9 +159,8 @@ function updateSidebar() {
 }
 
 
-// ================================
-// Save any current textarea edits back to the page
-// ================================
+// Copy any textarea edits back into the page object, so nothing is lost when
+// the user navigates away.
 function saveCurrentEdits() {
     if (pages[currentIndex]) {
         pages[currentIndex].ocrText = ocrTextarea.value;
@@ -150,9 +168,8 @@ function saveCurrentEdits() {
 }
 
 
-// ================================
-// Render current page in modal
-// ================================
+// Show the current page in the modal: OCR text, scan image, banners,
+// nav button state and the counters.
 function renderPage() {
     if (!pages.length) return;
 
@@ -173,7 +190,7 @@ function renderPage() {
         approveBtn.disabled = false;
     }
 
-    // Status banner (matches Wikisource "Not proofread" pattern)
+    // same wording as the "Not proofread" banner on a real Page: edit view
     if (statusBanner) {
         if (page.status === 'approved') {
             statusBanner.textContent = 'This page has been approved for saving';
@@ -204,9 +221,8 @@ function renderPage() {
 }
 
 
-// ================================
-// Update status counters and progress bar
-// ================================
+// Refresh the pending/approved/rejected counters and the progress bar.
+// Save stays disabled until at least one page is approved.
 function updateStats() {
     let pending = 0, approved = 0, rejected = 0;
     pages.forEach(p => {
@@ -225,9 +241,8 @@ function updateStats() {
 }
 
 
-// ================================
-// Actions
-// ================================
+// Approve the current page and move on. Pages where OCR failed can't be
+// approved - there would be nothing to save.
 function approvePage() {
     const page = pages[currentIndex];
     if (page.hasErrors) return;
@@ -241,6 +256,7 @@ function approvePage() {
     renderPage();
 }
 
+// Reject the current page and move on. Rejected pages are dropped on save.
 function rejectPage() {
     pages[currentIndex].status = 'rejected';
     hasUnsavedChanges = true;
@@ -251,8 +267,9 @@ function rejectPage() {
     renderPage();
 }
 
+// Skip = decide later. Keeps any text edits but the page stays pending, so it
+// stays red on the Index page and can be picked up in a later run.
 function skipPage() {
-    // Defer the decision: keep the page pending and move on
     saveCurrentEdits();
     pages[currentIndex].status = 'pending';
 
@@ -279,25 +296,47 @@ function goNext() {
 }
 
 
-// ================================
-// Save & Cancel flows
-// ================================
+// Show the save summary (how many pages get saved / dropped / left alone)
+// before actually committing anything.
 function trySave() {
     const approved = pages.filter(p => p.status === 'approved');
     const rejected = pages.filter(p => p.status === 'rejected');
     const pending = pages.filter(p => p.status === 'pending');
 
-    let message = `Saving ${approved.length} approved page${approved.length > 1 ? 's' : ''}.\n\n`;
-    if (rejected.length) message += `${rejected.length} rejected page${rejected.length > 1 ? 's' : ''} will be discarded.\n`;
-    if (pending.length) message += `${pending.length} unreviewed page${pending.length > 1 ? 's' : ''} will remain as "not proofread" (unchanged).\n`;
-    message += '\nProceed with save?';
-
-    if (confirm(message)) {
-        alert('✓ Prototype: pages saved successfully.\n\nIn the real extension this would call the MediaWiki API to save each approved page.\n\nNotice: the Index page now shows approved pages in yellow. You can run Bulk OCR again for any red (unreviewed) pages.');
-        closeModal(true);  // pass true to keep state
+    let html = `<p><strong>${approved.length} approved page${approved.length !== 1 ? 's' : ''}</strong> will be saved to the wiki.</p>`;
+    html += '<ul>';
+    if (rejected.length) {
+        html += `<li>${rejected.length} rejected page${rejected.length !== 1 ? 's' : ''} will be discarded</li>`;
     }
+    if (pending.length) {
+        html += `<li>${pending.length} unreviewed page${pending.length !== 1 ? 's' : ''} will remain as "not proofread"</li>`;
+    }
+    html += '</ul>';
+    html += '<p style="margin-top:10px;">Do you want to proceed?</p>';
+
+    saveConfirmContent.innerHTML = html;
+    saveConfirmOverlay.classList.add('open');
 }
 
+// The mock "save". The real version loops over the approved pages and calls
+// mw.Api().postWithToken('csrf', ...) for each one, with error handling.
+function performSave() {
+    const approved = pages.filter(p => p.status === 'approved');
+    saveConfirmOverlay.classList.remove('open');
+
+    successMessage.textContent = `${approved.length} page${approved.length !== 1 ? 's' : ''} saved. The Index page now shows approved pages in yellow.`;
+    successOverlay.classList.add('open');
+}
+
+// User dismissed the success dialog: close up but keep the statuses so the
+// Index page shows what was saved.
+function finishSave() {
+    successOverlay.classList.remove('open');
+    closeModal(true);
+}
+
+// Warn before closing if the user has done any work. Same idea as the cancel
+// warning in PagelistInputWidget.Dialog.js.
 function tryClose() {
     if (hasUnsavedChanges) {
         confirmDialog.classList.add('open');
@@ -306,15 +345,15 @@ function tryClose() {
     }
 }
 
+// Close the modal. persist=true (used after a save) keeps the review statuses
+// so the Index page reflects them; otherwise everything resets to pending.
 function closeModal(persist = false) {
     modal.classList.remove('open');
     confirmDialog.classList.remove('open');
 
     if (!persist) {
-        // Discard: reset all statuses
         pages.forEach(p => p.status = 'pending');
     }
-    // else: keep the approved/rejected statuses so the Index shows them
 
     currentIndex = 0;
     hasUnsavedChanges = false;
@@ -323,6 +362,8 @@ function closeModal(persist = false) {
     updatePersistenceInfo();
 }
 
+// Show the "your approved pages are saved" note on the Index page once at
+// least one page has been approved.
 function updatePersistenceInfo() {
     if (!persistenceInfo) return;
     const anyApproved = pages.some(p => p.status === 'approved');
@@ -330,19 +371,16 @@ function updatePersistenceInfo() {
 }
 
 
-// ================================
-// Event bindings
-// ================================
+// event wiring
+
 openBtn.addEventListener('click', async () => {
     if (!pages.length) await loadPages();
     currentIndex = 0;
 
-    // Only reset pages that are still PENDING or ERROR
-    // (approved/rejected pages from previous run stay as they were)
+    // reset only unreviewed pages - approved/rejected ones from an earlier
+    // run keep their status
     pages.forEach(p => {
-        if (p.status === 'approved' || p.status === 'rejected') {
-            // Keep it - user already reviewed
-        } else {
+        if (p.status !== 'approved' && p.status !== 'rejected') {
             p.status = 'pending';
         }
     });
@@ -363,11 +401,27 @@ rejectBtn.addEventListener('click', rejectPage);
 skipBtn.addEventListener('click', skipPage);
 saveBtn.addEventListener('click', trySave);
 
+saveConfirmCancel.addEventListener('click', () => {
+    saveConfirmOverlay.classList.remove('open');
+});
+saveConfirmOk.addEventListener('click', performSave);
+successOk.addEventListener('click', finishSave);
+
 ocrTextarea.addEventListener('input', () => {
     hasUnsavedChanges = true;
 });
 
 document.addEventListener('keydown', (e) => {
+    // if a message dialog is open it gets the keys, nothing fires underneath
+    if (saveConfirmOverlay.classList.contains('open')) {
+        if (e.key === 'Escape') saveConfirmOverlay.classList.remove('open');
+        return;
+    }
+    if (successOverlay.classList.contains('open')) {
+        if (e.key === 'Escape' || e.key === 'Enter') finishSave();
+        return;
+    }
+
     if (!modal.classList.contains('open')) return;
     if (e.target.tagName === 'TEXTAREA') return;
 
@@ -385,7 +439,7 @@ function capitalize(str) {
 }
 
 
-// Build the Index pagelist immediately on page load
+// build the Index pagelist as soon as the page loads
 window.addEventListener('DOMContentLoaded', () => {
     loadPages();
 });
