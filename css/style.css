@@ -47,7 +47,6 @@ a.red {
 
 .mw-topbar {
     background: #f6f6f6;
-    border-bottom: 1px solid #a7d7f9;
     padding: 6px 12px;
     display: flex;
     justify-content: flex-end;
@@ -104,6 +103,80 @@ a.red {
 
 .mw-tab.red {
     color: #ba0000;
+}
+
+/* ================================
+   Vector 2010 sidebar + page layout
+   ================================ */
+
+.mw-page {
+    display: flex;
+    align-items: flex-start;
+}
+
+.mw-sidebar {
+    width: 165px;
+    flex-shrink: 0;
+    padding: 8px 8px 20px 10px;
+    font-size: 0.75em;
+}
+
+/* placeholder logo */
+.mw-logo {
+    width: 135px;
+    height: 135px;
+    margin: 4px auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #72777d;
+    font-weight: bold;
+    font-size: 1.3em;
+    background: #fff;
+    border: 1px solid #c8ccd1;
+    border-radius: 50%;
+}
+
+.mw-portal h3 {
+    color: #4d4d4d;
+    font-size: 0.95em;
+    font-weight: normal;
+    border-bottom: 1px solid #ccc;
+    margin: 12px 0 5px;
+    padding-bottom: 2px;
+}
+
+.mw-portal ul {
+    list-style: none;
+    margin: 0 0 10px;
+}
+
+.mw-portal li {
+    margin: 4px 0;
+    line-height: 1.4;
+}
+
+.mw-main {
+    flex: 1;
+    min-width: 0;
+    padding-right: 12px;
+}
+
+.mw-search {
+    display: flex;
+    align-items: center;
+    margin: 4px 0 4px 12px;
+}
+
+.mw-search input {
+    width: 165px;
+    padding: 3px 8px;
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    background: #fff;
+    font-size: 0.9em;
+    font-family: sans-serif;
 }
 
 .mw-content {

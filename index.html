@@ -30,20 +30,65 @@
         <a href="#">Log out</a>
     </div>
 
-    <!-- Vector 2010 tabs -->
-    <div class="mw-tabs">
-        <div class="mw-tabs-left">
-            <a href="#" class="mw-tab active">Index</a>
-            <a href="#" class="mw-tab red">Discussion</a>
-        </div>
-        <div class="mw-tabs-right">
-            <a href="#" class="mw-tab">Read</a>
-            <a href="#" class="mw-tab red">Edit</a>
-            <a href="#" class="mw-tab">View history</a>
-        </div>
-    </div>
+    <!-- Vector 2010 layout: sidebar on the left, tabs + content on the right -->
+    <div class="mw-page">
 
-    <div class="mw-content">
+        <div class="mw-sidebar">
+            <div class="mw-logo">
+                Logo
+            </div>
+            <div class="mw-portal">
+                <ul>
+                    <li><a href="#">Main page</a></li>
+                    <li><a href="#">Recent changes</a></li>
+                    <li><a href="#">Random page</a></li>
+                    <li><a href="#">Help about MediaWiki</a></li>
+                    <li><a href="#">Special pages</a></li>
+                </ul>
+            </div>
+            <div class="mw-portal">
+                <h3>Tools</h3>
+                <ul>
+                    <li><a href="#">What links here</a></li>
+                    <li><a href="#">Related changes</a></li>
+                    <li><a href="#">Upload file</a></li>
+                    <li><a href="#">Permanent link</a></li>
+                    <li><a href="#">Page information</a></li>
+                </ul>
+            </div>
+            <div class="mw-portal">
+                <h3>Print/export</h3>
+                <ul>
+                    <li><a href="#">Download EPUB</a></li>
+                    <li><a href="#">Download MOBI</a></li>
+                    <li><a href="#">Download PDF</a></li>
+                    <li><a href="#">Other formats</a></li>
+                    <li><a href="#">Printable version</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mw-main">
+
+            <div class="mw-tabs">
+                <div class="mw-tabs-left">
+                    <a href="#" class="mw-tab active">Index</a>
+                    <a href="#" class="mw-tab red">Discussion</a>
+                    <a href="#" class="mw-tab">English&nbsp;▾</a>
+                </div>
+                <div class="mw-tabs-right">
+                    <a href="#" class="mw-tab active">Read</a>
+                    <a href="#" class="mw-tab">Edit</a>
+                    <a href="#" class="mw-tab">View history</a>
+                    <a href="#" class="mw-tab" title="Watch this page">☆</a>
+                    <a href="#" class="mw-tab">More&nbsp;▾</a>
+                    <div class="mw-search">
+                        <input type="search" placeholder="Search mwdd-default">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mw-content">
 
         <h1 class="mw-page-title">Index:The History of Great Discoveries.pdf</h1>
 
@@ -82,7 +127,9 @@
             <strong>Note:</strong> Pages you approved are now saved. Pages not yet reviewed remain red — you can run Bulk OCR again anytime to process them.
         </div>
 
-    </div>
+            </div><!-- /mw-content -->
+        </div><!-- /mw-main -->
+    </div><!-- /mw-page -->
 
 <!-- Feedback modal. Hidden until Bulk OCR is clicked (.open on the overlay
      shows it). Becomes an OO.ui.ProcessDialog subclass in the extension. -->
