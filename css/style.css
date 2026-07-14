@@ -750,3 +750,151 @@ a.red {
     justify-content: flex-end;
     gap: 6px;
 }
+
+/* ================================
+   Additions: WikiEditor toolbar mock
+   ================================ */
+
+.wiki-editor-toolbar {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to bottom, #f6f6f6 0%, #e0e0e0 100%);
+    border: 1px solid #aaa;
+    border-bottom: none;
+    padding: 3px 6px;
+    gap: 2px;
+    flex-wrap: wrap;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 1px;
+    padding: 0 4px;
+    border-right: 1px solid #ccc;
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+.toolbar-btn {
+    width: 24px;
+    height: 22px;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 12px;
+    color: #252525;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    font-family: sans-serif;
+}
+
+.toolbar-btn:hover {
+    background: #fff;
+    border-color: #aaa;
+}
+
+.toolbar-btn.bold { font-weight: bold; }
+.toolbar-btn.italic { font-style: italic; }
+.toolbar-btn.underline { text-decoration: underline; }
+
+.toolbar-select {
+    height: 22px;
+    padding: 0 4px;
+    border: 1px solid #ccc;
+    font-size: 11px;
+    background: #fff;
+    border-radius: 2px;
+    font-family: sans-serif;
+}
+
+.ocr-textarea {
+    border-top: none !important;
+}
+
+/* Not-proofread status banner (matches Wikisource) */
+
+.status-banner {
+    padding: 8px 12px;
+    background: #fee7e6;
+    border: 1px solid #ba0000;
+    color: #ba0000;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 6px;
+}
+
+.status-banner.approved {
+    background: #d5fdf4;
+    border-color: #14866d;
+    color: #14866d;
+}
+
+/* ================================
+   Page number color states
+   ================================ */
+
+.pagelist-number.pending {
+    background: #fee7e6;
+    color: #ba0000;
+    border-color: #f8d7d3;
+}
+
+.pagelist-number.approved {
+    background: #fffde7;
+    color: #886600;
+    border-color: #ffe066;
+}
+
+.pagelist-number.rejected {
+    background: #fee7e6;
+    color: #ba0000;
+    border-color: #f8d7d3;
+    text-decoration: line-through;
+}
+
+/* ================================
+   Info bar showing persistence
+   ================================ */
+
+.persistence-info {
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: #eaf3ff;
+    border: 1px solid #a2c7f2;
+    font-size: 0.8em;
+    color: #252525;
+    display: none;
+}
+
+.persistence-info.visible {
+    display: block;
+}
+
+.legend {
+    margin-top: 8px;
+    display: flex;
+    gap: 12px;
+    font-size: 0.8em;
+    color: #54595d;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.legend-swatch {
+    display: inline-block;
+    padding: 1px 6px;
+    border: 1px solid;
+    font-size: 0.9em;
+}
+
+.legend-swatch.red { background: #fee7e6; color: #ba0000; border-color: #f8d7d3; }
+.legend-swatch.yellow { background: #fffde7; color: #886600; border-color: #ffe066; }

@@ -4,13 +4,13 @@
     "author": "James Wilson",
     "year": 1875,
     "publisher": "London Academic Press",
-    "totalPages": 5,
+    "totalPages": 9,
     "source": "File:Test_file_for_Wikisource_software.pdf"
   },
   "pages": [
     {
       "number": 1,
-      "image": "images/page-1.jpg",
+      "image": "mock-data/images/page-1.jpg",
       "status": "pending",
       "ocrText": "CHAPTER ONE\n\nThe Beginning of the Journey\n\nIn the year 1492, a young sailor from Genoa set out on a voyage that would change the course of history. Christopher Columbus had spent many years studying the maps of the known world.\n\nHe believed that a shorter route to the Indies could be found by sailing west across the great ocean.",
       "confidence": 0.94,
@@ -18,16 +18,16 @@
     },
     {
       "number": 2,
-      "image": "images/page-2.jpg",
+      "image": "mock-data/images/page-2.jpg",
       "status": "pending",
       "ocrText": "The King and Queen of Spain, Ferdinand and 1sabella, agreed to fund the expedition after many months of discussion. Three ships were prepared for the voyage: the Santa Maria, the Pinta, and the Nina.\n\nOn August 3rd, the small fleet set sail from the port of Palos.",
       "confidence": 0.87,
       "hasErrors": false,
-      "note": "OCR made small error: '1sabella' instead of 'Isabella' - mentor should notice this"
+      "note": "OCR error: '1sabella' instead of 'Isabella'"
     },
     {
       "number": 3,
-      "image": "images/page-3.jpg",
+      "image": "mock-data/images/page-3.jpg",
       "status": "pending",
       "ocrText": "After more than two months at sea, the crew grew restless and afraid. Food supplies were low and fresh water was rationed carefully. Columbus kept two logbooks: one showing the true distance travelled, and another showing a shorter distance to keep his crew from panic.\n\nOn October 12th, a lookout on the Pinta finally sighted land.",
       "confidence": 0.96,
@@ -35,21 +35,53 @@
     },
     {
       "number": 4,
-      "image": "images/page-4.jpg",
+      "image": "mock-data/images/page-4.jpg",
       "status": "pending",
       "ocrText": "CHAPTER TW0\n\nThe New World\n\nThe island where Columbus first landed was called Guanahani by its inhabitants. He renamed it San Salvador in honour of the Saviour. The people of the island were friendly and curious about the strange visitors from across the sea.",
       "confidence": 0.82,
       "hasErrors": false,
-      "note": "OCR error: 'TW0' should be 'TWO' - mentor should notice this"
+      "note": "OCR error: 'TW0' should be 'TWO'"
     },
     {
       "number": 5,
-      "image": "images/page-5.jpg",
+      "image": "mock-data/images/page-5.jpg",
       "status": "pending",
       "ocrText": "",
       "confidence": 0,
       "hasErrors": true,
       "errorMessage": "OCR could not extract text from this page. The image quality may be too low or the page may be blank."
+    },
+    {
+      "number": 6,
+      "image": "mock-data/images/page-6.jpg",
+      "status": "pending",
+      "ocrText": "The Spanish explorers continued to survey the surrounding islands over the following weeks. They visited what is now known as Cuba and Hispaniola. On Christmas Eve, the Santa Maria ran aground on a reef near the coast of Hispaniola.\n\nThe wreck of the flagship forced Columbus to make difficult decisions.",
+      "confidence": 0.91,
+      "hasErrors": false
+    },
+    {
+      "number": 7,
+      "image": "mock-data/images/page-7.jpg",
+      "status": "pending",
+      "ocrText": "Return to Spain\n\nThe voyage home was rougher than the journey out. Terrible storms battered the two remaining ships and separated them for several days. Columbus feared his discoveries would be lost with him at sea.",
+      "confidence": 0.93,
+      "hasErrors": false
+    },
+    {
+      "number": 8,
+      "image": "mock-data/images/page-8.jpg",
+      "status": "pending",
+      "ocrText": "Both ships eventually reached Europe safely in March 1493. Columbus was received as a hero at the Spanish court. The King and Queen granted him the titles he had been promised and prepared to fund a much larger second expedition.",
+      "confidence": 0.95,
+      "hasErrors": false
+    },
+    {
+      "number": 9,
+      "image": "mock-data/images/page-9.jpg",
+      "status": "pending",
+      "ocrText": "CONCLUSION\n\nThe first voyage of Columbus changed the world in ways that no one at the time could have imagined. It began a period of European exploration and colonisation that would last for centuries.",
+      "confidence": 0.98,
+      "hasErrors": false
     }
   ]
 }

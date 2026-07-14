@@ -47,6 +47,9 @@ const statRejected = document.getElementById('statRejected');
 const saveCount = document.getElementById('saveCount');
 const progressFill = document.getElementById('progressFill');
 const pageSidebar = document.getElementById('pageSidebar');
+const pagelistElement = document.getElementById('pagelist');
+const persistenceInfo = document.getElementById('persistenceInfo');
+const statusBanner = document.getElementById('statusBanner');
 
 
 // ================================
@@ -59,6 +62,7 @@ async function loadPages() {
         pages = data.pages.map(p => ({ ...p }));
         totalPagesNum.textContent = pages.length;
         buildSidebar();
+        buildPagelist();
     } catch (err) {
         console.error('Failed to load pages:', err);
         alert('Prototype error: could not load pages.json.\nServe via GitHub Pages or local server.');
@@ -97,6 +101,24 @@ function buildSidebar() {
         });
 
         pageSidebar.appendChild(item);
+    });
+}
+
+
+// ================================
+// Build the Index page's page number list
+// Shows color state: red = pending, yellow = approved
+// ================================
+function buildPagelist() {
+    if (!pagelistElement) return;
+    pagelistElement.innerHTML = '';
+
+    pages.forEach(page => {
+        const link = document.createElement('a');
+        link.className = 'pagelist-number ' + page.status;
+        link.textContent = page.number;
+        link.title = `Page ${page.number} — ${capitalize(page.status)}`;
+        pagelistElement.appendChild(link);
     });
 }
 
@@ -148,6 +170,17 @@ function renderPage() {
     } else {
         errorBanner.classList.remove('visible');
         approveBtn.disabled = false;
+    }
+
+    // Status banner (matches Wikisource "Not proofread" pattern)
+    if (statusBanner) {
+        if (page.status === 'approved') {
+            statusBanner.textContent = 'This page has been approved for saving';
+            statusBanner.className = 'status-banner approved';
+        } else {
+            statusBanner.textContent = 'This page has not been proofread';
+            statusBanner.className = 'status-banner';
+        }
     }
 
     pageImage.src = page.image;
@@ -248,8 +281,8 @@ function trySave() {
     message += '\nProceed with save?';
 
     if (confirm(message)) {
-        alert('✓ Prototype: pages saved successfully.\n\nIn the real extension this would call the MediaWiki API to save each approved page.');
-        closeModal();
+        alert('✓ Prototype: pages saved successfully.\n\nIn the real extension this would call the MediaWiki API to save each approved page.\n\nNotice: the Index page now shows approved pages in yellow. You can run Bulk OCR again for any red (unreviewed) pages.');
+        closeModal(true);  // pass true to keep state
     }
 }
 
@@ -261,13 +294,27 @@ function tryClose() {
     }
 }
 
-function closeModal() {
+function closeModal(persist = false) {
     modal.classList.remove('open');
     confirmDialog.classList.remove('open');
-    pages.forEach(p => p.status = 'pending');
+
+    if (!persist) {
+        // Discard: reset all statuses
+        pages.forEach(p => p.status = 'pending');
+    }
+    // else: keep the approved/rejected statuses so the Index shows them
+
     currentIndex = 0;
     hasUnsavedChanges = false;
     updateStats();
+    buildPagelist();
+    updatePersistenceInfo();
+}
+
+function updatePersistenceInfo() {
+    if (!persistenceInfo) return;
+    const anyApproved = pages.some(p => p.status === 'approved');
+    persistenceInfo.classList.toggle('visible', anyApproved);
 }
 
 
@@ -277,7 +324,17 @@ function closeModal() {
 openBtn.addEventListener('click', async () => {
     if (!pages.length) await loadPages();
     currentIndex = 0;
-    pages.forEach(p => p.status = 'pending');
+
+    // Only reset pages that are still PENDING or ERROR
+    // (approved/rejected pages from previous run stay as they were)
+    pages.forEach(p => {
+        if (p.status === 'approved' || p.status === 'rejected') {
+            // Keep it - user already reviewed
+        } else {
+            p.status = 'pending';
+        }
+    });
+
     hasUnsavedChanges = false;
     renderPage();
     modal.classList.add('open');
@@ -285,7 +342,7 @@ openBtn.addEventListener('click', async () => {
 
 cancelBtn.addEventListener('click', tryClose);
 confirmCancelBtn.addEventListener('click', () => confirmDialog.classList.remove('open'));
-confirmDiscardBtn.addEventListener('click', closeModal);
+confirmDiscardBtn.addEventListener('click', () => closeModal(false));
 
 prevBtn.addEventListener('click', goPrev);
 nextBtn.addEventListener('click', goNext);
@@ -312,3 +369,9 @@ document.addEventListener('keydown', (e) => {
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+
+// Build the Index pagelist immediately on page load
+window.addEventListener('DOMContentLoaded', () => {
+    loadPages();
+});
