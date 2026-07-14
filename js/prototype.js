@@ -1,15 +1,16 @@
 /**
  * Bulk OCR Feedback Modal Prototype
  *
- * This is a HTML/CSS/JS prototype demonstrating the design for
- * the feedback modal that will let Wikisource volunteers review,
- * edit, approve, or reject OCR results before saving them.
+ * Static HTML/CSS/JS prototype for GSoC 2026 Wikisource Bulk OCR project.
+ * The real implementation will use OO.ui.ProcessDialog with BookletLayout.
  *
- * The real implementation will use OOUI ProcessDialog inside the
- * Wikisource extension. This prototype focuses on the UX flow only.
+ * Design based on:
+ * - Task T394131 requirements (5 pages preview, safety banner)
+ * - OOUI BookletLayout with outlined:true pattern
+ * - Vector 2010 skin styling
+ * - Existing ProcessDialog patterns from ProofreadPage extension
  */
 
-// State
 let pages = [];
 let currentIndex = 0;
 let hasUnsavedChanges = false;
@@ -18,7 +19,6 @@ let hasUnsavedChanges = false;
 const modal = document.getElementById('modalOverlay');
 const confirmDialog = document.getElementById('confirmOverlay');
 const openBtn = document.getElementById('openModal');
-const closeBtn = document.getElementById('closeBtn');
 const cancelBtn = document.getElementById('cancelBtn');
 const confirmCancelBtn = document.getElementById('confirmCancelBtn');
 const confirmDiscardBtn = document.getElementById('confirmDiscardBtn');
@@ -45,6 +45,8 @@ const statPending = document.getElementById('statPending');
 const statApproved = document.getElementById('statApproved');
 const statRejected = document.getElementById('statRejected');
 const saveCount = document.getElementById('saveCount');
+const progressFill = document.getElementById('progressFill');
+const pageSidebar = document.getElementById('pageSidebar');
 
 
 // ================================
@@ -54,11 +56,73 @@ async function loadPages() {
     try {
         const response = await fetch('mock-data/pages.json');
         const data = await response.json();
-        pages = data.pages.map(p => ({ ...p })); // clone
+        pages = data.pages.map(p => ({ ...p }));
         totalPagesNum.textContent = pages.length;
+        buildSidebar();
     } catch (err) {
         console.error('Failed to load pages:', err);
-        alert('Prototype error: could not load pages.json. Are you serving this via GitHub Pages or a local server?');
+        alert('Prototype error: could not load pages.json.\nServe via GitHub Pages or local server.');
+    }
+}
+
+
+// ================================
+// Build sidebar with page list (BookletLayout style)
+// ================================
+function buildSidebar() {
+    const header = pageSidebar.querySelector('.sidebar-header');
+    pageSidebar.innerHTML = '';
+    pageSidebar.appendChild(header);
+
+    pages.forEach((page, index) => {
+        const item = document.createElement('div');
+        item.className = 'sidebar-item';
+        item.dataset.index = index;
+
+        const num = document.createElement('div');
+        num.className = 'page-num';
+        num.textContent = `Page ${page.number}`;
+
+        const dot = document.createElement('div');
+        dot.className = 'status-dot';
+        if (page.hasErrors) dot.classList.add('error');
+
+        item.appendChild(num);
+        item.appendChild(dot);
+
+        item.addEventListener('click', () => {
+            saveCurrentEdits();
+            currentIndex = index;
+            renderPage();
+        });
+
+        pageSidebar.appendChild(item);
+    });
+}
+
+
+// ================================
+// Update sidebar highlights
+// ================================
+function updateSidebar() {
+    document.querySelectorAll('.sidebar-item').forEach((item, index) => {
+        item.classList.toggle('active', index === currentIndex);
+        const dot = item.querySelector('.status-dot');
+        dot.className = 'status-dot';
+        const status = pages[index].status;
+        if (status === 'approved') dot.classList.add('approved');
+        else if (status === 'rejected') dot.classList.add('rejected');
+        else if (pages[index].hasErrors) dot.classList.add('error');
+    });
+}
+
+
+// ================================
+// Save any current textarea edits back to the page
+// ================================
+function saveCurrentEdits() {
+    if (pages[currentIndex]) {
+        pages[currentIndex].ocrText = ocrTextarea.value;
     }
 }
 
@@ -71,15 +135,12 @@ function renderPage() {
 
     const page = pages[currentIndex];
 
-    // Header
     currentPageNum.textContent = page.number;
     pageStatus.textContent = capitalize(page.status);
 
-    // Textarea
     ocrTextarea.value = page.ocrText || '';
     ocrTextarea.classList.toggle('error', page.hasErrors);
 
-    // Error banner
     if (page.hasErrors) {
         errorBanner.classList.add('visible');
         errorMessage.textContent = ' ' + (page.errorMessage || 'Unknown error');
@@ -89,30 +150,28 @@ function renderPage() {
         approveBtn.disabled = false;
     }
 
-    // Image
     pageImage.src = page.image;
     pageImage.alt = 'Scan of page ' + page.number;
 
-    // Nav button states
     prevBtn.disabled = currentIndex === 0;
     nextBtn.disabled = currentIndex === pages.length - 1;
 
-    // Tooltips
     if (currentIndex > 0) {
         const p = pages[currentIndex - 1];
-        prevTooltip.textContent = `Page ${p.number} — ${p.status}`;
+        prevTooltip.textContent = `Page ${p.number} (${p.status})`;
     }
     if (currentIndex < pages.length - 1) {
         const p = pages[currentIndex + 1];
-        nextTooltip.textContent = `Page ${p.number} — ${p.status}`;
+        nextTooltip.textContent = `Page ${p.number} (${p.status})`;
     }
 
+    updateSidebar();
     updateStats();
 }
 
 
 // ================================
-// Update status counters
+// Update status counters and progress bar
 // ================================
 function updateStats() {
     let pending = 0, approved = 0, rejected = 0;
@@ -126,6 +185,9 @@ function updateStats() {
     statRejected.textContent = rejected;
     saveCount.textContent = approved;
     saveBtn.disabled = approved === 0;
+
+    const percent = ((approved + rejected) / pages.length) * 100;
+    progressFill.style.width = percent + '%';
 }
 
 
@@ -134,12 +196,11 @@ function updateStats() {
 // ================================
 function approvePage() {
     const page = pages[currentIndex];
-    // Save edited text
+    if (page.hasErrors) return;
     page.ocrText = ocrTextarea.value;
     page.status = 'approved';
     hasUnsavedChanges = true;
 
-    // Auto-advance if not last page
     if (currentIndex < pages.length - 1) {
         currentIndex++;
     }
@@ -158,8 +219,7 @@ function rejectPage() {
 
 function goPrev() {
     if (currentIndex > 0) {
-        // Save any edits before switching
-        pages[currentIndex].ocrText = ocrTextarea.value;
+        saveCurrentEdits();
         currentIndex--;
         renderPage();
     }
@@ -167,7 +227,7 @@ function goPrev() {
 
 function goNext() {
     if (currentIndex < pages.length - 1) {
-        pages[currentIndex].ocrText = ocrTextarea.value;
+        saveCurrentEdits();
         currentIndex++;
         renderPage();
     }
@@ -182,9 +242,9 @@ function trySave() {
     const rejected = pages.filter(p => p.status === 'rejected');
     const pending = pages.filter(p => p.status === 'pending');
 
-    let message = `Saving ${approved.length} approved pages.\n\n`;
-    if (rejected.length) message += `${rejected.length} rejected pages will be discarded.\n`;
-    if (pending.length) message += `${pending.length} unreviewed pages will remain as "not proofread" (unchanged).\n`;
+    let message = `Saving ${approved.length} approved page${approved.length > 1 ? 's' : ''}.\n\n`;
+    if (rejected.length) message += `${rejected.length} rejected page${rejected.length > 1 ? 's' : ''} will be discarded.\n`;
+    if (pending.length) message += `${pending.length} unreviewed page${pending.length > 1 ? 's' : ''} will remain as "not proofread" (unchanged).\n`;
     message += '\nProceed with save?';
 
     if (confirm(message)) {
@@ -204,7 +264,6 @@ function tryClose() {
 function closeModal() {
     modal.classList.remove('open');
     confirmDialog.classList.remove('open');
-    // Reset state
     pages.forEach(p => p.status = 'pending');
     currentIndex = 0;
     hasUnsavedChanges = false;
@@ -224,7 +283,6 @@ openBtn.addEventListener('click', async () => {
     modal.classList.add('open');
 });
 
-closeBtn.addEventListener('click', tryClose);
 cancelBtn.addEventListener('click', tryClose);
 confirmCancelBtn.addEventListener('click', () => confirmDialog.classList.remove('open'));
 confirmDiscardBtn.addEventListener('click', closeModal);
@@ -235,12 +293,10 @@ approveBtn.addEventListener('click', approvePage);
 rejectBtn.addEventListener('click', rejectPage);
 saveBtn.addEventListener('click', trySave);
 
-// Track edits
 ocrTextarea.addEventListener('input', () => {
     hasUnsavedChanges = true;
 });
 
-// Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
     if (!modal.classList.contains('open')) return;
     if (e.target.tagName === 'TEXTAREA') return;
@@ -253,9 +309,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 
-// ================================
-// Helpers
-// ================================
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }

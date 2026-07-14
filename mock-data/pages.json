@@ -4,7 +4,7 @@
     "author": "James Wilson",
     "year": 1875,
     "publisher": "London Academic Press",
-    "totalPages": 9,
+    "totalPages": 5,
     "source": "File:Test_file_for_Wikisource_software.pdf"
   },
   "pages": [
@@ -20,10 +20,10 @@
       "number": 2,
       "image": "images/page-2.jpg",
       "status": "pending",
-      "ocrText": "The King and Queen of Spain, Ferdinand and 1sabella, agreed to fund the expedition after many months of discussion. Three ships were prepared for the voyage: the Santa Maria, the Pinta, and the Nina.\n\nOn August 3rd, the small fleet set sail from the port of Palos. The journey ahead was uncertain and many sailors were afraid of what they might find beyond the horizon.",
+      "ocrText": "The King and Queen of Spain, Ferdinand and 1sabella, agreed to fund the expedition after many months of discussion. Three ships were prepared for the voyage: the Santa Maria, the Pinta, and the Nina.\n\nOn August 3rd, the small fleet set sail from the port of Palos.",
       "confidence": 0.87,
       "hasErrors": false,
-      "note": "OCR made small error: '1sabella' instead of 'Isabella'"
+      "note": "OCR made small error: '1sabella' instead of 'Isabella' - mentor should notice this"
     },
     {
       "number": 3,
@@ -37,10 +37,10 @@
       "number": 4,
       "image": "images/page-4.jpg",
       "status": "pending",
-      "ocrText": "CHAPTER TW0\n\nThe New World\n\nThe island where Columbus first landed was called Guanahani by its inhabitants. He renamed it San Salvador in honour of the Saviour. The people of the island were friendly and curious about the strange visitors from across the sea.\n\nColumbus wrote in his journal that these people would make good servants and could be easily converted to Christianity.",
+      "ocrText": "CHAPTER TW0\n\nThe New World\n\nThe island where Columbus first landed was called Guanahani by its inhabitants. He renamed it San Salvador in honour of the Saviour. The people of the island were friendly and curious about the strange visitors from across the sea.",
       "confidence": 0.82,
       "hasErrors": false,
-      "note": "OCR error: 'TW0' should be 'TWO'"
+      "note": "OCR error: 'TW0' should be 'TWO' - mentor should notice this"
     },
     {
       "number": 5,
@@ -50,38 +50,6 @@
       "confidence": 0,
       "hasErrors": true,
       "errorMessage": "OCR could not extract text from this page. The image quality may be too low or the page may be blank."
-    },
-    {
-      "number": 6,
-      "image": "images/page-6.jpg",
-      "status": "pending",
-      "ocrText": "The Spanish explorers continued to survey the surrounding islands over the following weeks. They visited what is now known as Cuba and Hispaniola. On Christmas Eve, the Santa Maria ran aground on a reef near the coast of Hispaniola.\n\nThe wreck of the flagship forced Columbus to make difficult decisions. He left thirty nine men behind at a settlement he called La Navidad.",
-      "confidence": 0.91,
-      "hasErrors": false
-    },
-    {
-      "number": 7,
-      "image": "images/page-7.jpg",
-      "status": "pending",
-      "ocrText": "Return to Spain\n\nThe voyage home was rougher than the journey out. Terrible storms battered the two remaining ships and separated them for several days. Columbus feared his discoveries would be lost with him at sea.\n\nHe wrote a letter describing his findings, sealed it in a barrel, and threw it overboard so that even if the ships were lost, news of the new lands might reach Europe.",
-      "confidence": 0.93,
-      "hasErrors": false
-    },
-    {
-      "number": 8,
-      "image": "images/page-8.jpg",
-      "status": "pending",
-      "ocrText": "Both ships eventually reached Europe safely in March 1493. Columbus was received as a hero at the Spanish court. The King and Queen granted him the titles he had been promised and prepared to fund a much larger second expedition.\n\nNews of the discoveries spread quickly across Europe. Other nations began preparing their own voyages of exploration.",
-      "confidence": 0.95,
-      "hasErrors": false
-    },
-    {
-      "number": 9,
-      "image": "images/page-9.jpg",
-      "status": "pending",
-      "ocrText": "CONCLUSION\n\nThe first voyage of Columbus changed the world in ways that no one at the time could have imagined. It began a period of European exploration and colonisation that would last for centuries.\n\nThe consequences for the peoples of the Americas were often tragic. Disease, warfare, and forced labour reduced their populations dramatically in the century that followed contact with Europeans.",
-      "confidence": 0.98,
-      "hasErrors": false
     }
   ]
 }
